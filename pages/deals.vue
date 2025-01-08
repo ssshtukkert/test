@@ -49,7 +49,6 @@
             </q-input>
           </div>
         </div>
-
         <div style="width: 100%" v-for="card in filteredProducts">
           <productCardCe
             :image="card.image"
@@ -64,6 +63,7 @@
             :price="card.price"
             :obj="card"
             :currentRoute="route.path"
+            :paymentState="card.payment"
           />
         </div>
         <div
@@ -77,13 +77,13 @@
   </q-layout>
 </template>
 <script setup lang="ts">
-import { ref } from "vue";
-import productCardCe from "~/components/ui/productCard.ce.vue";
+import { ref, onMounted } from "vue";
 import { useStore } from "../stores/useStore";
 import { useRoute } from "vue-router";
+import productCardCe from "~/components/ui/productCard.ce.vue";
 
 const store = useStore();
-const cards = store.$state.products;
+const deals = store.$state.deals;
 
 const sellType = ref<string>("all");
 const searchText = ref<string>("");
@@ -91,7 +91,7 @@ const searchText = ref<string>("");
 const route = useRoute();
 
 const filteredProducts = computed(() => {
-  return cards.filter((product) => {
+  return deals.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
       .includes(searchText.value.toLowerCase());
@@ -102,111 +102,3 @@ const filteredProducts = computed(() => {
   });
 });
 </script>
-
-<style lang="css">
-@import url("https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap");
-body {
-  overflow-x: hidden;
-}
-.toolbar {
-  width: 100vw;
-  height: 70px;
-  background-color: #e0e3ee;
-}
-.navField {
-  width: 100%;
-}
-.navbar {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  justify-content: flex-end;
-  column-gap: 30px;
-  color: #2d3b87;
-}
-.navbarItem {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-.filterSection {
-  width: 100%;
-  display: flex;
-  flex-direction: row;
-  margin-top: 20px;
-  align-items: center;
-}
-.toggle {
-  background-color: #f4f5f9;
-  color: #969dc3;
-}
-.rubik {
-  font-family: "Rubik", serif;
-  font-optical-sizing: auto;
-  font-weight: 500;
-  font-style: normal;
-}
-.searchField {
-  display: flex;
-  width: 200px;
-}
-.types {
-  display: flex;
-  width: 50%;
-  justify-content: start;
-}
-.search {
-  display: flex;
-  width: 50%;
-  justify-content: end;
-}
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-/* --------- */
-.cardMainBlock {
-  display: flex;
-  flex-direction: row;
-  border-color: #e0e3ee;
-  border-radius: 20px;
-  border: 1px solid #e0e3ee;
-  width: 100%;
-  margin-top: 20px;
-  max-height: 300px;
-}
-.leftCardBlock {
-  margin-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  display: flex;
-  width: 70%;
-  align-items: start;
-}
-.rightCardBlock {
-  border-color: #e0e3ee;
-  border-radius: 20px;
-  border: 1px solid #e0e3ee;
-  width: 30%;
-  padding-top: 15px;
-  border-top: none;
-  border-bottom: none;
-  padding-left: 10px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-}
-.button {
-  background-color: #f4f5f9;
-  color: #2d3b87;
-}
-.btnGroup {
-  display: flex;
-  flex-direction: row;
-  column-gap: 10px;
-  position: absolute;
-  bottom: 20px;
-}
-</style>
